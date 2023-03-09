@@ -1,0 +1,142 @@
+#!/bin/bash
+
+#Autor= "Nu||d3v"==============="new_day_is"
+
+#####################################################################################################################
+#Automatization for Search subdomaind === "amass","assetfinder","findomain","subfinder","sublist3r","crobat","turbolist3r.py","ctfr.py","anubis","acamar.py","github-subdomains.oy","shuffledns","cencys-subdomain.py"
+#####################################################################################################################
+
+dominio=$1
+wordlists=/usr/share/wordlists/SecLists/Discovery/DNS/deepmagic.com-prefixes-top50000.txt
+resolvers=/home/josema96/HackerOne/hunters_tools/resolvers.txt
+
+#funtion1
+Help(){
+	echo -e "\n\tRcon_Scriptkiddie.sh"
+	echo -e "\n\tEjemplo de ejecución de la herramienta"
+	echo -e "\n\t./R_recon.sh"
+}
+
+#funtion2
+vali_domain(){
+	host $dominio > /dev/null 2>&1
+}
+
+
+#funtion3
+subdomain(){
+for dominio in $(cat $dominio);do
+	mkdir -p $dominio $dominio/sub
+
+	#echo -e "\n\tsearch subdomains con 'amass\n'";
+	#amass enum -d $dominio | sort -u | anew $ruta/amass.txt;
+	#echo -e "\ntermino la ejecution 'amass'\n";
+	echo -e "\n\tsearch subdomains con 'assetfinder'\n";
+	assetfinder --subs-only $dominio | sort -u | anew $dominio/sub/asset.txt;
+	echo -e "\n\ttermino la ejecution con 'assetfinder'\n";
+	echo -e "\n\tsearch subdomains con 'findomain'\n";
+	findomain -t $dominio | sort -u | anew $dominio/sub/findo.txt;
+	echo -e "\n\ttermino la ejecution con 'findomain'\n";
+	echo -e "\n\tsearch subdomains con 'subfinder'\n";
+	subfinder -d $dominio | sort -u | anew $dominio/sub/subfin.txt;
+	echo -e "\n\ttermino la ejecution con 'subfinder'\n";
+	echo -e "\n\tsearch subdomains con 'sublist3r'\n";
+	sublist3r -d $dominio -o $dominio/sub/sublis.txt;
+	echo -e "\n\ttermino la ejecution con 'sublist3r'\n";
+	echo -e "\n\tsearch subdomains con 'crobat'\n";
+	crobat -s $dominio | sort -u | anew $dominio/sub/crob.txt;
+	echo -e "\n\ttermino la ejecution con 'crobat'\n";
+	echo -e "\n\tsearch subdomains con 'turbolist3r'\n";
+	turbolist3r.py -d $dominio -o $dominio/sub/turbo.txt;
+	echo -e "\n\ttermino la ejecution con 'turbolist3r'\n";
+	echo -e "\n\tsearch subdomains con 'ctfr.py'\n";
+	ctfr.py -d $dominio -o $dominio/sub/ctfr.txt;
+	echo -e "\n\ttermino la ejecution con 'ctfr.py'\n";
+	echo -e "\n\tsearch subdomains con 'anubis'\n";
+	anubis -t $dominio  -S | sort -u | anew $dominio/sub/anub.txt;
+	echo -e "\n\ttermino la ejecution con 'anubis'\n";
+	#echo -e "\n\tsearch subdomains con 'acamar.py'\n";
+	#acamar.py $dominio 2> /dev/null | grep $dominio | sort -u | anew $dominio/sub/acam.txt;
+	#echo -e "\n\ttermino la ejecution con 'acamar.py'\n";
+	echo -e "\n\tsearch subdomains con 'github-subdomains.py'\n";
+	github-subdomains.py -t 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 -d $dominio | sort -u | anew $dominio/sub/git_su.txt;
+	echo -e "\n\ttermino la ejecution con 'github-subdomains.py'\n";
+
+#brute force for subdomaind "shuffledns"
+#	echo -e "\n\tsearch subdomains con 'shuffledns'\n";
+#	shuffledns -d $dominio -w $wordlists -r $resolvers | sort -u | anew $dominio/sub/shuff.txt;
+#	echo -e "\n\ttermino la ejecution con 'shuffledns'\n";
+#	echo -e "\n\tsearch subdomains con 'cencys-subdomain.py'\n";
+#	censys-subdomain.py --censys-api-id 00a19a0d-3bef-4a04-a75f-ac97844c98f1 --censys-api-secret wYSZz8VA9EHvj8YvG6A4Q3rxDx5UEfrC  $dominio | sort -u | anew $dominio/sub/cen_sub.txt;
+#	echo -e "\n\ttermino la ejecution con 'cencys-subdomain.py'\n";
+	echo -e "\n\tguardando todo los sub all 'all.txt'\n"
+	cat $dominio/sub/*.txt | sort -u | anew $dominio/sub/all.txtt ; #rm $ruta/*.txt;
+	echo -e "\n\tsearch subdominio dentro de un subdominio\n"
+	xargs -a all.txtt -I@ sh -c 'subfinder -d @ | anew $dominio/sub/all.txtt';
+	echo -e "\n\ttermino la ejecucion\n";
+	#echo -e "\n\tcompletado\n"
+	#echo -e "\n\teliminando los .txt"
+	#rm $ruta/*.txt;
+	#echo -e "\n\tse tensoooooooooo"
+done
+}
+
+
+#funtion4
+ 
+#all_sub(){
+#       echo -e "\n\tguardando todos los subdomains al archivo 'all_sub.txt'\n"
+#       cat $ruta/*.txt | sort -u | anew $ruta/all_sub.tx;rm $ruta/*.txt
+#       echo -e "\n\ttermino la ejecucion\n"
+#}
+
+#resol_Domain(){
+#	echo -e "\n\tValidando resolvers DNS con 'shuffledns'\n"
+#	shuffledns -d $domino -list $ruta/all.txtt -o $ruta/domains_vali.txtt -r $resolvers
+
+	#echo -e "\n\tValidando resolvers DNS con 'shuffledns'\n"
+	#puredns bruteforce $wordlists $dominio -r $resolvers | tee $ruta/resol.txtt
+
+#}
+
+#funtion5
+		#Validar si existe tal "URL" con "httpx"
+#httpx(){
+#	echo -e "\n\tvalidar existente 'url'\n"
+#	cat $ruta/domains_vali.txt | httpx | sort -u | anew $ruta/url_probe.txt
+#	echo -e "\n\ttermino la ejecución"
+#}
+
+#funtion6
+#validar si existe tal "URL" con "urlprobe"
+#urlprobe(){
+#	echo -e "\n\tvalidar existente 'url'\n"
+#	cat $ruta/domains_vali.txtt | sort -u | anew $ruta/probe.txt
+#	echo -e "\n\ttermino ña ejecucion"
+#}
+
+#fintion7
+#fhc(){
+#	echo -e "\n\tvalidar existente 'url'\n"
+#	cat $ruta/domains_vali.txtt | sort -u | anew $ruta/fhc.txt
+#	echo -e "\n\ttermino la ejecucion\n"
+#}
+
+#funtion8
+#main call funtions
+if [ "$#" == "1" ];then
+	vali_domain
+	if [ "$(echo $?)" == "0" ];then
+		subdomain
+		#resol_Domain
+		#all_sub
+		#httpx
+		#urlprobe
+		#fhc
+	else
+		echo -e "\nno es un dominio"
+	fi
+else
+	Help
+
+fi
